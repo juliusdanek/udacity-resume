@@ -79,6 +79,10 @@ a {
   display: block;
 }
 
+.website {
+  display: inline;
+}
+
 .welcome-message {
   font-style: italic;
   font-size: 18px;
