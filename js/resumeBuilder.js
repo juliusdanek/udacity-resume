@@ -9,19 +9,30 @@ var bio = {
 	"pictureUrl": "images/Beach_small.jpg",
 	"welcome": "Hi, I am Julius, welcome to my resume!",
 	"skills": ["Cooking", "Cleaning", "Reading"]
-}
+};
 
-var formattedName = HTMLheaderName.replace("%data%", bio.name);
-var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
-var formattedPicture = HTMLbioPic.replace("%data%", bio.pictureUrl);
+bio.display = function () {
+	var formattedName = HTMLheaderName.replace("%data%", bio.name);
+	var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
+	var formattedPicture = HTMLbioPic.replace("%data%", bio.pictureUrl);
+	$("#header").prepend(formattedRole);
+	$("#header").prepend(formattedName);
+	$("#header").append(formattedPicture);
+	$("#topContacts").append(HTMLemail.replace("%data%", bio.contacts.email));
+	$("#topContacts").append(HTMLcontactGeneric.replace("%data%", bio.contacts.website));
+	$("#topContacts").append(HTMLlocation.replace("%data%", bio.contacts.location));
+	$("#header").append(HTMLwelcomeMsg.replace("%data%", bio.welcome));
+	if(bio.skills.length > 0) {
+		$("#header").append(HTMLskillsStart);
+		var formattedSkill;
+		for (var x in bio.skills) {
+			formattedSkill = HTMLskills.replace("%data%", bio.skills[x]);
+			$("#skills").append(formattedSkill);
+		}
+	};
+};
 
-$("#header").prepend(formattedRole);
-$("#header").prepend(formattedName);
-$("#header").append(formattedPicture);
-$("#topContacts").append(HTMLemail.replace("%data%", bio.contacts.email))
-$("#topContacts").append(HTMLcontactGeneric.replace("%data%", bio.contacts.website))
-$("#topContacts").append(HTMLlocation.replace("%data%", bio.contacts.location))
-$("#header").append(HTMLwelcomeMsg.replace("%data%", bio.welcome))
+bio.display();
 
 var education = {
 	"schools": [
@@ -43,6 +54,24 @@ var education = {
 		}]
 }
 
+education.display = function() {
+	for (var i in education.schools) {
+		$("#education").append(HTMLschoolStart);
+
+		var formattedSchoolName = HTMLschoolName.replace("%data%", education.schools[i].name);
+		formattedSchoolName = formattedSchoolName.replace("#", education.schools[i].url);	
+		var formattedDegree = HTMLschoolDegree.replace("%data%", education.schools[i].degree);
+		var schoolDegree = formattedSchoolName + formattedDegree
+		var formattedDates = HTMLschoolDates.replace("%data%", education.schools[i].graduationYear);
+		var formattedLocation = HTMLschoolLocation.replace("%data%", education.schools[i].location);
+		var formattedMajor = HTMLschoolMajor.replace("%data%", education.schools[i].major);
+
+		$(".education-entry:last").append(schoolDegree, formattedDates, formattedLocation, formattedMajor);
+	}
+}
+
+education.display();
+
 var work = {
 	"jobs": [
 	{
@@ -62,40 +91,8 @@ var work = {
 	]
 }
 
-var projects = {
-	"projects": [
-	{
-		"title": "Google Maps Project",
-		"dates": "30.05.2015",
-		"description": "An interactive Google Map",
-		"images": "images/maps.png"
-	}]
-}
-
-// projects contains an array of projects. Each project object in projects should contain a title, dates worked, description, and an images array with URL strings for project images.
-
-projects.display = function() {
-	$("#projects").append(HTMLprojectStart);
-	$(".project-entry").append(HTMLprojectTitle.replace("%data%", projects.projects[0].title));
-	$(".project-entry").append(HTMLprojectDates.replace("%data%", projects.projects[0].dates));
-	$(".project-entry").append(HTMLprojectDescription.replace("%data%", projects.projects[0].description));
-	$(".project-entry").append(HTMLprojectImage.replace("%data%", projects.projects[0].images));
-}
-
-projects.display();
-
-if(bio.skills.length > 0) {
-
-	$("#header").append(HTMLskillsStart);
-	var formattedSkill;
-	for (x in bio.skills) {
-		formattedSkill = HTMLskills.replace("%data%", bio.skills[x])
-		$("#skills").append(formattedSkill)
-	}
-};
-
-function displayWork() {
-	for (i in work.jobs) {
+work.display = function () {
+	for (var i in work.jobs) {
 		$("#workExperience").append(HTMLworkStart);
 
 		var formattedEmployer = HTMLworkEmployer.replace("%data%", work.jobs[i].employer);	
@@ -109,25 +106,29 @@ function displayWork() {
 	}
 }
 
-displayWork();
+work.display();
 
-education.display = function() {
-	for (i in work.jobs) {
-		$("#education").append(HTMLschoolStart);
-
-		var formattedSchoolName = HTMLschoolName.replace("%data%", education.schools[i].name);
-		formattedSchoolName = formattedSchoolName.replace("#", education.schools[i].url);	
-		var formattedDegree = HTMLschoolDegree.replace("%data%", education.schools[i].degree);
-		var schoolDegree = formattedSchoolName + formattedDegree
-		var formattedDates = HTMLschoolDates.replace("%data%", education.schools[i].graduationYear);
-		var formattedLocation = HTMLschoolLocation.replace("%data%", education.schools[i].location);
-		var formattedMajor = HTMLschoolMajor.replace("%data%", education.schools[i].major);
-
-		$(".education-entry:last").append(schoolDegree, formattedDates, formattedLocation, formattedMajor);
-	}
+var projects = {
+	"projects": [
+	{
+		"title": "Google Maps Project",
+		"dates": "30.05.2015",
+		"description": "An interactive Google Map",
+		"images": "images/maps.png"
+	}]
 }
 
-education.display();
+projects.display = function() {
+	$("#projects").append(HTMLprojectStart);
+	$(".project-entry").append(HTMLprojectTitle.replace("%data%", projects.projects[0].title));
+	$(".project-entry").append(HTMLprojectDates.replace("%data%", projects.projects[0].dates));
+	$(".project-entry").append(HTMLprojectDescription.replace("%data%", projects.projects[0].description));
+	$(".project-entry").append(HTMLprojectImage.replace("%data%", projects.projects[0].images));
+}
+
+projects.display();
+
+
 
 function inName(name) {
     var finalName = name;
@@ -137,8 +138,6 @@ function inName(name) {
     finalName = names.join(" ");
     return finalName;
 }
-
-// $("#main").append(internationalizeButton)
 
 $("#mapDiv").append(googleMap);
 	
